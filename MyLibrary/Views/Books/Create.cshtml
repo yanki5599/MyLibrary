@@ -1,0 +1,82 @@
+﻿@model MyLibrary.ViewModels.BooksVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Book</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div id="Books-Volumes">
+                @if (Model == null || Model.BooksVMs == null || Model.BooksVMs.Count == 0)
+                {
+                    <div class="Book">
+                        <div class="form-group">
+                            <input name="BooksVMs[0].Name" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <input name ="BooksVMs[0].Width" class="form-control" />
+                        </div>
+                    </div>
+                }
+                else if (Model.BooksVMs != null && Model.BooksVMs.Count > 0)
+                {
+                    @for (var i = 0; i < Model.BooksVMs.Count; i++)
+                    {
+                        <div class="Book">
+                            <div class="form-group">
+                                <label asp-for="@Model.BooksVMs[@i].Name" class="control-label"></label>
+                                <input asp-for="@Model.BooksVMs[@i].Name" class="form-control" />
+                                <span asp-validation-for="@Model.BooksVMs[@i].Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.BooksVMs[@i].Width" class="control-label"></label>
+                                <input asp-for="@Model.BooksVMs[@i].Width" class="form-control" />
+                                <span asp-validation-for="@Model.BooksVMs[@i].Width" class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <input type="button" id="btnAddNew" value="Add Volume" class="btn btn-primary" />
+            <div class="form-group">
+                <label asp-for="Height" class="control-label"></label>
+                <input asp-for="Height" class="form-control" />
+                <span asp-validation-for="Height" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryName"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(function () {
+            $("#btnAddNew").click(function () {
+                var count = $("#Books-Volume").length;
+                $("#Books-Volumes").append(" < div class= 'Book' > <div class='form-group' > <input name='BooksVMs[ " + count + " ].Name' class= 'form-control' />  </div>  < div class= 'form-group' > <input name ='BooksVMs[ " + count + " ].Width' class= 'form-control' />  </div> < /div>");
+            });
+        });
+
+    </script>
+}
