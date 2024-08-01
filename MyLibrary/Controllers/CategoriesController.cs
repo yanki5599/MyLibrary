@@ -44,8 +44,9 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Categories/Create
-        public IActionResult Create()
+        public IActionResult Create(string? messege = null)
         {
+            ViewData["messege"] = messege;
             return View();
         }
 
@@ -58,6 +59,10 @@ namespace MyLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (await _context.Category.FirstOrDefaultAsync(c => c.CategoryName == category.CategoryName) != null)
+                {
+                    return RedirectToAction(nameof(Create), new {messege = "הקטגוריה קיימת כבר"});
+                }
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

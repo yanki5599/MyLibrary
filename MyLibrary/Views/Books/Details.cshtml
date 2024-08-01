@@ -31,8 +31,18 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.SetOfBooks)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SetOfBooks.Id)
+        <dd class="col-sm-10">
+            
+
+            @if (Model.SetOfBooksId != null)
+            {
+                <i class="fa-solid fa-check" style="color:green"></i>
+            }
+            else
+            {
+                <i class="fa-solid fa-xmark" style="color:red"></i>
+            }
+
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Shelf)
@@ -43,6 +53,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

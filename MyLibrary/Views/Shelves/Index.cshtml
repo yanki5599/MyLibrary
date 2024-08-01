@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>רשימת מדפים</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">צור מדף חדש</a>
 </p>
 <table class="table">
     <thead>
@@ -20,6 +20,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AvailableSpace)
             </th>
             <th></th>
         </tr>
@@ -36,9 +39,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AvailableSpace)
+                </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Create" asp-controller="Books" asp-route-id="@item.Id">Add a book</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

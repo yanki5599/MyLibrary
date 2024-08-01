@@ -8,52 +8,89 @@
 
 <h4>Book</h4>
 <hr />
+
+@if (ViewBag.errors != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.errors
+        <a asp-action="Create" asp-controller="Shelves">add shelf</a>
+    </div>
+
+}
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div id="Books-Volumes">
-                @if (Model == null || Model.BooksVMs == null || Model.BooksVMs.Count == 0)
-                {
-                    <div class="Book">
-                        <div class="form-group">
-                            <input name="BooksVMs[0].Name" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input name ="BooksVMs[0].Width" class="form-control" />
-                        </div>
+            <div class="form-group">
+                <label>Book or set</label>
+                <div >
+
+                    <input id="radioSingle" class="radio" type="radio" asp-for="IsSet" name="IsSet" value="false"  />
+                    <label for="IsSet">Single</label>
+                    <input id="radioSet" class="radio" type="radio" asp-for="IsSet" name="IsSet" value="true"  />
+                    <label for="IsSet">Set</label>
+
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryName"></select>
+                </div>
+
+                <div id="single-book-section" style="@(Model.IsSet ? "display:none" : "display:block")">
+                    <div class="form-group">
+                        <label asp-for="FirstBook.Name" class="control-label"></label>
+                        <input asp-for="FirstBook.Name" class="form-control" />
+                        <span asp-validation-for="FirstBook.Name" class="text-danger"></span>
                     </div>
-                }
-                else if (Model.BooksVMs != null && Model.BooksVMs.Count > 0)
-                {
-                    @for (var i = 0; i < Model.BooksVMs.Count; i++)
-                    {
-                        <div class="Book">
-                            <div class="form-group">
-                                <label asp-for="@Model.BooksVMs[@i].Name" class="control-label"></label>
-                                <input asp-for="@Model.BooksVMs[@i].Name" class="form-control" />
-                                <span asp-validation-for="@Model.BooksVMs[@i].Name" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="@Model.BooksVMs[@i].Width" class="control-label"></label>
-                                <input asp-for="@Model.BooksVMs[@i].Width" class="form-control" />
-                                <span asp-validation-for="@Model.BooksVMs[@i].Width" class="text-danger"></span>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
-            <input type="button" id="btnAddNew" value="Add Volume" class="btn btn-primary" />
-            <div class="form-group">
-                <label asp-for="Height" class="control-label"></label>
-                <input asp-for="Height" class="form-control" />
-                <span asp-validation-for="Height" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryName"></select>
+                    <div class="form-group">
+                        <label asp-for="FirstBook.Width" class="control-label"></label>
+                        <input asp-for="FirstBook.Width" class="form-control" />
+                        <span asp-validation-for="FirstBook.Width" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Height" class="control-label"></label>
+                        <input asp-for="Height" class="form-control" />
+                        <span asp-validation-for="Height" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
+            <div id="set-book-section" style="@(Model.IsSet ? "display:block" : "display:none")">
+
+                <div class="form-group">
+                    <label asp-for="SetOfBooksName" class="control-label"></label>
+                    <input asp-for="SetOfBooksName" class="form-control" required />
+                    <span asp-validation-for="SetOfBooksName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Height" class="control-label"></label>
+                    <input asp-for="Height" class="form-control" required />
+                    <span asp-validation-for="Height" class="text-danger"></span>
+                </div>
+
+                <div id="Books-Volumes">
+                    <button type="button" id="add-book" class="btn btn-secondary m-4">Add another Volume</button>
+                    @if (Model.Books != null && Model.Books.Any())
+                    {
+                        @for (int i = 0; i < Model.Books.Count; i++)
+                        {
+                            <div class="book-form mb-3" id="book-form-@i">
+                                <h4>Book @i</h4>
+                                <div class="form-group">
+                                    <label asp-for="Books[i].Name" class="control-label"></label>
+                                    <input asp-for="Books[i].Name" class="form-control" />
+                                    <span asp-validation-for="Books[i].Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Books[i].Width" class="control-label"></label>
+                                    <input asp-for="Books[i].Width" class="form-control" />
+                                    <span asp-validation-for="Books[i].Width" class="text-danger"></span>
+                                </div>
+                                <button type="button" class="btn btn-danger" onclick="removeBookForm(@i)">Remove</button>
+                            </div>
+                        }}
+                </div>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -71,12 +108,69 @@
     }
 
     <script>
-        $(function () {
-            $("#btnAddNew").click(function () {
-                var count = $("#Books-Volume").length;
-                $("#Books-Volumes").append(" < div class= 'Book' > <div class='form-group' > <input name='BooksVMs[ " + count + " ].Name' class= 'form-control' />  </div>  < div class= 'form-group' > <input name ='BooksVMs[ " + count + " ].Width' class= 'form-control' />  </div> < /div>");
+
+      
+
+
+
+        document.querySelectorAll('input[name="IsSet"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.value === 'true') {
+                    document.getElementById('single-book-section').style.display = 'none';
+                    document.getElementById('set-book-section').style.display = 'block';
+
+                    if (document.getElementById("Books-Volumes").children.length == 1) {
+                        document.getElementById('add-book').click();
+                    }
+                    disableSingleBookInputs();
+                } else {
+                    document.getElementById('single-book-section').style.display = 'block';
+                    document.getElementById('set-book-section').style.display = 'none';
+                    enableSingleBookInputs();
+                }
             });
         });
 
+        function disableSingleBookInputs() {
+            document.querySelectorAll('#single-book-section input, #single-book-section select').forEach(input => {
+                input.disabled = true;
+            });
+        }
+
+        function enableSingleBookInputs() {
+            document.querySelectorAll('#single-book-section input, #single-book-section select').forEach(input => {
+                input.disabled = false;
+            });
+        }
+
+        document.getElementById('add-book').addEventListener('click',
+            function () {
+                var booksContainer = document.getElementById('Books-Volumes');
+                var index = booksContainer.children.length - 1; // -1 cuz the button is a child
+                var newBookForm = `
+                                <div class="book-form mb-3" id="book-form-${index}">
+                                    <h4>Book ${index}</h4>
+                                    <div class="form-group">
+                                        <label for="Books_${index}__Name">Book name</label>
+                                        <input required class="form-control" type="text" id="Books_${index}__Name" name="Books[${index}].Name" />
+                                        <span class="text-danger" data-valmsg-for="Books[${index}].Name" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Books_${index}__Width">Book width</label>
+                                        <input  required class="form-control" type="number" id="Books_${index}__Width" name="Books[${index}].Width" />
+                                        <span class="text-danger" data-valmsg-for="Books[${index}].Width" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <button type="button" class="btn btn-danger" onclick="removeBookForm(${index})">Remove</button>
+                                </div>`;
+                booksContainer.insertAdjacentHTML('beforeend', newBookForm);
+            });
+
+        function removeBookForm(index) {
+            var bookForm = document.getElementById(`book-form-${index}`);
+            bookForm.remove();
+        }
+
+
     </script>
+
 }

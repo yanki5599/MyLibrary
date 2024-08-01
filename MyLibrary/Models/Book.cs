@@ -25,8 +25,10 @@ namespace MyLibrary.Models
         public int Width { get; set; }
         public int Height { get; set; }
         public int? SetOfBooksId { get; set; }
+        [Display(Name ="Is a part of a set")]
         public SetOfBooks? SetOfBooks { get; set; }
         public int ShelfId { get; set; }
         public Shelf Shelf { get; set; }
+
     }
 }

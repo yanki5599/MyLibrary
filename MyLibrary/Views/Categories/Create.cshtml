@@ -4,6 +4,24 @@
     ViewData["Title"] = "Create";
 }
 
+@if (ViewBag.messege != null)
+{
+    <div id="error" class="alert alert-danger" role="alert">
+        @ViewBag.messege
+    </div>
+
+   
+}
+<script type="text/javascript">
+    setTimeout(function () {
+        var element = document.getElementById('error');
+        if (element) {
+            element.parentNode.removeChild(element);
+        }
+    }, 3000);
+</script>
+
+
 <h1>Create</h1>
 
 <h4>Category</h4>
@@ -30,4 +48,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+   
+        
 }
