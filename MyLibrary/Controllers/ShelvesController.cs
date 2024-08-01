@@ -46,9 +46,23 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Shelves/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["CategoryName"] = new SelectList(_context.Category, "Id", "CategoryName");
+            if (id != null)
+            {
+                var currCat = _context.Category.First(s => s.Id == id);
+                var list = new List<Category>();
+                list.Add(currCat);
+                ViewData["CategoryName"] = new SelectList(list, "Id", "CategoryName", currCat.Id);
+            }
+            else
+            {
+                ViewData["CategoryName"] =
+                new SelectList(_context.Category, "Id", "CategoryName");
+
+            }
+
+            //ViewData["CategoryName"] = new SelectList(_context.Category, "Id", "CategoryName");
             return View();
         }
 
