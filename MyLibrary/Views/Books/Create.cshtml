@@ -17,6 +17,11 @@
     </div>
 
 }
+<div id="categoryAlert" class="alert alert-warning d-none" role="alert">
+    Please add categories first.
+    <a asp-action="Create" asp-controller="Categories" >Add a Category</a>
+</div>
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -32,8 +37,9 @@
 
                 </div>
                 <div class="form-group">
-                    <label asp-for="CategoryId" class="control-label"></label>
-                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryName"></select>
+                    <label asp-for="CategoryId" class="control-label">Category name</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryName" id="categorySelect"></select>
+
                 </div>
 
                 <div id="single-book-section" style="@(Model.IsSet ? "display:none" : "display:block")">
@@ -106,7 +112,35 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var categorySelect = document.getElementById('categorySelect');
+            var alertDiv = document.getElementById('categoryAlert');
 
+            function showAlert() {
+                alertDiv.classList.remove('d-none');
+                setTimeout(function () {
+                    alertDiv.classList.add('d-none');
+                }, 3000);
+            }
+
+            function checkCategoryList() {
+                if (categorySelect && categorySelect.options.length === 0) {
+                    showAlert();
+                }
+            }
+
+            // Check on page load
+            checkCategoryList();
+
+            // Show alert on click if empty
+            categorySelect.addEventListener('click', function () {
+                if (categorySelect.options.length === 0) {
+                    showAlert();
+                }
+            });
+        });
+    </script>
     <script>
 
       

@@ -80,6 +80,11 @@ namespace MyLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BooksVM booksVm)
         {
+            if (booksVm.IsSet)
+            {
+                ModelState.Remove("FirstBook.Name");
+                ModelState.Remove("FirstBook.Width");
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -145,7 +150,7 @@ namespace MyLibrary.Controllers
                                                                   sh.Height >= booksVm.Height);
            
             if (shelf == null)
-                throw new BookCreateFail("There is no shelf available , try adding new shelfs.");
+                throw new BookCreateFail("There is no shelf with these parameters available , try adding new shelfs.");
 
             return shelf;
         }
