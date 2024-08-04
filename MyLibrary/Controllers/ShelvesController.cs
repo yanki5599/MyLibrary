@@ -71,7 +71,7 @@ namespace MyLibrary.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Width,Height,CategoryId")] Shelf shelf)
+        public async Task<IActionResult> Create([Bind("Width,Height,CategoryId")] Shelf shelf)
         {
             if (ModelState.IsValid)
             {

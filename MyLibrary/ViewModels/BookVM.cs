@@ -1,4 +1,5 @@
 ﻿using MyLibrary.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyLibrary.ViewModels
 {
@@ -6,7 +7,9 @@ namespace MyLibrary.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        [Range(1, int.MaxValue)]
         public int Width { get; set; }
-        public int Height { get; set; }
+       /* [Range(1, int.MaxValue)]
+        public int Height { get; set; }*/
     }
 }

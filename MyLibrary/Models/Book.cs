@@ -7,12 +7,12 @@ namespace MyLibrary.Models
     [Table("Books")]
     public class Book
     {
-        public Book(BookVM bookVm , int shelfId , int? setOfBooksId = null)
+        public Book(BookVM bookVm ,int height, int shelfId , int? setOfBooksId = null)
         {
             Id = bookVm.Id;
             Name = bookVm.Name;
             Width = bookVm.Width;
-            Height = bookVm.Height;
+            Height = height;
             ShelfId = shelfId;
             SetOfBooksId = setOfBooksId;
         }

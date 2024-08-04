@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace MyLibrary.ViewModels
 {
@@ -8,6 +9,7 @@ namespace MyLibrary.ViewModels
 
         public BookVM? FirstBook { get; set; }
         public bool IsSet {  get; set; } = false;
+        [Range(1,int.MaxValue)]
         public int Height { get; set; }
         public string? SetOfBooksName { get; set; } = null;
         public int CategoryId { get; set; }
@@ -18,7 +20,7 @@ namespace MyLibrary.ViewModels
         {
             get
             {
-                return Books.Sum(x => x.Width) + FirstBook?.Width ?? 0;
+                return Books.Sum(x => x.Width) + (FirstBook?.Width ?? 0);
             }
         }
     }

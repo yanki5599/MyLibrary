@@ -61,7 +61,7 @@ namespace MyLibrary.Controllers
                 var currShelf = _context.Shelf.Include(s => s.Category).First(s => s.Id == id);
                 var list = new List<Shelf>();
                 list.Add(currShelf);
-                ViewData["CategoryName"] =new SelectList(list,"Id", "Category.CategoryName",currShelf.Id);
+                ViewData["CategoryName"] =new SelectList(list, "CategoryId", "Category.CategoryName",currShelf.CategoryId);
             }
             else
             {
@@ -85,6 +85,8 @@ namespace MyLibrary.Controllers
                 ModelState.Remove("FirstBook.Name");
                 ModelState.Remove("FirstBook.Width");
             }
+           
+
             if (ModelState.IsValid)
             {
                 try
@@ -97,8 +99,8 @@ namespace MyLibrary.Controllers
                     }
                     else
                     {
-                        booksVm.FirstBook.Height = booksVm.Height;
-                        var book = new Book(booksVm.FirstBook, shelf.Id);
+                        //booksVm.FirstBook.Height = booksVm.Height;
+                        var book = new Book(booksVm.FirstBook,booksVm.Height, shelf.Id);
                         _context.Add(book);
                     }
 
@@ -137,8 +139,8 @@ namespace MyLibrary.Controllers
 
             foreach (var bookVm in booksVm.Books)
             {
-                bookVm.Height = booksVm.Height;
-                var book = new Book(bookVm, shelf.Id, setId);
+                //bookVm.Height = booksVm.Height;
+                var book = new Book(bookVm, booksVm.Height, shelf.Id, setId);
                 _context.Add(book);
             }
         }
